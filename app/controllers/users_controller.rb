@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  wrap_parameters format: []
+  rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
-
+  wrap_parameters format: []
   def index
     users = User.all
     render json: users
@@ -47,9 +47,9 @@ class UsersController < ApplicationController
     render json: { error: "User not found."}, status: :not_found
   end
 
-
-
-
+  def render_invalid_record(invalid)
+    render json: { error: invalid.record.errors }, status: :unprocessable_entity
+  end
 
 end
 

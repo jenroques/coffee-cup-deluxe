@@ -1,7 +1,7 @@
 class FavoritesController < ApplicationController
-  wrap_parameters format: []
+  rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
-
+  wrap_parameters format: []
   def index
     favorites = Favorite.all
     render json: favorites
@@ -36,6 +36,11 @@ class FavoritesController < ApplicationController
   def render_not_found_response
     render json: { error: "Your Favorites could not be found."}, status: :not_found
   end
+
+  def render_invalid_record(invalid)
+    render json: { error: invalid.record.errors }, status: :unprocessable_entity
+  end
+
 
 
 end
