@@ -1,6 +1,8 @@
 class ReviewsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
+  validates :title, presence: true
+  validates :description, presence: true
   wrap_parameters format: []
 
   def index
