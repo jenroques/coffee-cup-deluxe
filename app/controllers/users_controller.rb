@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+  validates :name, presence: true
+  validates :password_digest, presence: true
+
   wrap_parameters format: []
   def index
     users = User.all
