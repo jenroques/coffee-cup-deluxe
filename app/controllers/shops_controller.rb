@@ -5,7 +5,7 @@ class ShopsController < ApplicationController
 
   def index
     shops = Shop.all
-    render json: shops, except: [:created_at, :updated_at]
+    render json: shops
   end
 
   def show
