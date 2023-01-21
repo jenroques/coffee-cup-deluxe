@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_18_190004) do
+ActiveRecord::Schema.define(version: 2023_01_21_014245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 2023_01_18_190004) do
     t.string "title"
     t.string "description"
     t.integer "score"
-    t.bigint "user_id", null: false
     t.bigint "shop_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["shop_id"], name: "index_reviews_on_shop_id"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2023_01_18_190004) do
   create_table "shops", force: :cascade do |t|
     t.string "name"
     t.string "image_url"
+    t.integer "average_score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

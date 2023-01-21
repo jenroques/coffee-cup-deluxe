@@ -3,7 +3,6 @@ class CreateFavorites < ActiveRecord::Migration[6.1]
     create_table :favorites do |t|
       t.string :drink
       t.string :treat
-
       t.belongs_to :user, null: false, foreign_key: true
       t.belongs_to :shop, null: false, foreign_key: true
 
