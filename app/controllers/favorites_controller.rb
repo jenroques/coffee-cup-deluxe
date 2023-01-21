@@ -1,6 +1,7 @@
 class FavoritesController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+
   wrap_parameters format: []
   def index
     favorites = Favorite.all
@@ -13,7 +14,7 @@ class FavoritesController < ApplicationController
   end
 
   def create
-    favorite = find_favorite
+    favorite = Favorite.create(favorite_params)
     render json: favorite, status: :created
   end
 
@@ -30,7 +31,7 @@ class FavoritesController < ApplicationController
   end
 
   def favorite_params
-    params.permit(:id, :drink, :treat, :user_id, :shop_id)
+    params.permit(:drink, :treat, :user_id, :shop_id)
   end
 
   def render_not_found_response
