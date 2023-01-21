@@ -36,7 +36,7 @@ const Shops = () => {
     console.log(shops)
 
     const grid = shops.map((shop, index) => {
-        const { name, image_url, slug, average_score } = shop
+        const { id, name, image_url, slug, average_score } = shop
 
         return (
             <Shop
@@ -45,6 +45,7 @@ const Shops = () => {
                 image_url={image_url}
                 slug={slug}
                 average_score={average_score}
+                id={id}
             />
         )
     })
