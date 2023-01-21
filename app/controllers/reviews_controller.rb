@@ -1,8 +1,7 @@
 class ReviewsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
-  validates :title, presence: true
-  validates :description, presence: true
+
   wrap_parameters format: []
 
   def index
@@ -16,7 +15,7 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    review = find_review
+    review = Review.create(review_params)
     render json: review, status: :created
   end
 
@@ -40,7 +39,7 @@ class ReviewsController < ApplicationController
   end
 
   def review_params
-    params.permit(:id, :title, :description, :score, :user_id, :shop_id)
+    params.permit(:title, :description, :score, :shop_id, :user_id)
   end
 
   def update_review_params
