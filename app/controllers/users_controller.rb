@@ -1,10 +1,9 @@
 class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
-  validates :name, presence: true
-  validates :password_digest, presence: true
 
   wrap_parameters format: []
+
   def index
     users = User.all
     render json: users
@@ -12,11 +11,11 @@ class UsersController < ApplicationController
 
   def show
     user = find_user
-    render json: user, status: :ok
+    render json: user, include: :reviews, status: :ok
   end
 
   def create
-    user = find_user
+    user = User.create(user_params)
     render json: user, status: :created
   end
 
@@ -39,7 +38,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:id, :name, :password_digest)
+    params.permit(:name, :password_digest)
   end
 
   def password_update
