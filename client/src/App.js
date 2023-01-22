@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import Login from './User/Login';
@@ -10,16 +10,17 @@ import Shops from './Shops/Shops';
 import Navbar from './Utils/Navbar';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    fetch("/me").then((res) => {
+    fetch("/auth").then((res) => {
       if (res.ok) {
-        res.json().then((user) => setUser(user));
+        res.json().then((user) => setCurrentUser(user));
       }
     })
   }, []);
 
+  //if (!currentUser) return <Login setCurrentUser={setCurrentUser} />
   return (
     <>
       <Navbar />
