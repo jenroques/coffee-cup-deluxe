@@ -1,4 +1,6 @@
 class FavoritesController < ApplicationController
+  before_action :authorize
+  skip_before_action :authorize, only: [:index]
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 
@@ -30,8 +32,8 @@ class FavoritesController < ApplicationController
     Favorite.find(params[:id])
   end
 
-  def favorite_params
-    params.permit(:drink, :treat, :user_id, :shop_id)
+  def authorize
+    return render json: { error: "Not authorized" }, status: :unauthorized unless session.include? :user_id
   end
 
   def render_not_found_response
