@@ -1,4 +1,6 @@
 class ReviewsController < ApplicationController
+  before_action :authorize
+  skip_before_action :authorize, only: [:index]
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
 
