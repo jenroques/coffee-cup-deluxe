@@ -4,22 +4,17 @@ class UsersController < ApplicationController
 
   wrap_parameters format: []
 
-  def index
-    users = User.all
-    render json: users
-  end
-
   def show
-    user = User.find_by(id: session[:user_id])
-    if user
-      render json: user
+      current_user = User.find(session[:user_id])
+    if current_user
+      render json: current_user
     else
       render json: { error: "Not authorized" }, status: :unauthorized
     end
   end
 
   def create
-    user = User.create(user_params)
+    user = User.create!(user_params)
     render json: user, status: :created
   end
 
@@ -41,11 +36,11 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:name, :password_digest)
+    params.permit(:name, :password)
   end
 
   def password_update
-    params.permit(:password_digest)
+    params.permit(:password)
   end
 
   def render_not_found_response
