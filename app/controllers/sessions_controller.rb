@@ -1,16 +1,15 @@
 class SessionsController < ApplicationController
-  def click
-    cookies[:click] ||= 0
-    cookies[:click] = cookies[:click].to_i + 1
-    session[:click] ||= 0
-    session[:click] += 1
-    render json: { session: session, cookies: cookies.to_hash}
-  end
+  skip_before_action :authorize, only: :create
 
   def create
     user = User.find_by(name: params[:name])
-    session[:user_id] = user_id
-    render json: user
+    if user&.authenticate(params[:password])
+      session[:user_id] = user.id
+      byebug
+      render json: user, status: :created
+    else
+      render json: { error: {login: "Invalid username or password"}}, status: :unauthorized
   end
+end
 
 end
