@@ -10,7 +10,15 @@ import Shops from './Shops/Shops';
 import Navbar from './Utils/Navbar';
 
 function App() {
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    fetch("/me").then((res) => {
+      if (res.ok) {
+        res.json().then((user) => setUser(user));
+      }
+    })
+  }, []);
 
   return (
     <>
