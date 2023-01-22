@@ -15,14 +15,20 @@ const Subheader = styled.p`
 `
 
 const Header = () => {
-    // Add Animation
+  // Add Animation
 
-    return (
-        <Wrapper>
-            <h1>The Coffee Cup</h1>
-            <Subheader>Your coffee shop headquarters. Share your experience.</Subheader>
-        </Wrapper>
-    )
+  const handleCookieClick = () => {
+    fetch('/cookie_click')
+      .then(res => res.json())
+      .then(console.log)
+  }
+
+  return (
+    <Wrapper>
+      <h1>The Coffee Cup</h1>
+      <Subheader>Your coffee shop headquarters. Share your experience.</Subheader>
+    </Wrapper>
+  )
 }
 
 export default Header
