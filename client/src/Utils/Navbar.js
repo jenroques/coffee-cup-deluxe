@@ -60,27 +60,32 @@ const Logo = styled.span`
     text-decoration: none;
   }
 `
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
+  function handleLogout() {
+    fetch("/logout", {
+      method: "DELETE",
+    }).then(() => onLogout());
+  }
 
-    return (
-        <Wrapper>
-            <Container>
-                <Nav>
-                    <Left>
-                        <Logo><Link to="/">Home</Link></Logo>
-                    </Left>
-                    <Right>
-                        <Menu>
-                            <Fragment>
-                                <li><Link to="/login">Login</Link></li>
-                                <li><Link to="/signup">Signup</Link></li>
-                            </Fragment>
-                        </Menu>
-                    </Right>
-                </Nav>
-            </Container>
-        </Wrapper>
-    )
+  return (
+    <Wrapper>
+      <Container>
+        <Nav>
+          <Left>
+            <Logo><Link to="/">Home</Link></Logo>
+          </Left>
+          <Right>
+            <Menu>
+              <Fragment>
+                <li><Link to="/login">Login</Link></li>
+                <li><Link to="/signup">Signup</Link></li>
+              </Fragment>
+            </Menu>
+          </Right>
+        </Nav>
+      </Container>
+    </Wrapper>
+  )
 
 }
 
