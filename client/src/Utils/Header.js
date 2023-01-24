@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  padding:100px 100px 10px 100px;
+  padding:50px 50px 10px 50px;
 
   h1 {
-    font-size:42px;
+    font-size:32px;
   }
 `
 
@@ -26,7 +26,7 @@ const Header = () => {
   return (
     <Wrapper>
       <h1>The Coffee Cup</h1>
-      <Subheader>Your coffee shop headquarters. Share your experience.</Subheader>
+      <Subheader>Your neighborhood headquarters. Share your experience.</Subheader>
     </Wrapper>
   )
 }
