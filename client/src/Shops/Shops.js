@@ -4,6 +4,7 @@ import Header from '../Utils/Header';
 // import airlinesQuery from '../../queries/airlinesQuery'
 import styled from 'styled-components'
 
+
 const Home = styled.div`
   text-align:center;
   margin-left: auto;
