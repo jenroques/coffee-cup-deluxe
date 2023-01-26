@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const Profile = () => {
+const Profile = ({ user }) => {
+
+    useEffect(() => {
+        fetch(`/users/${user.id}`)
+            .then(res => res.json())
+            .then(console.log(user))
+    }, [])
+
+
     return (
-        <div>Profile</div>
+        <div>{user.name}</div>
     )
 }
 
