@@ -1,40 +1,112 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import { Context } from "./Utils/Context";
 import Login from './User/Login';
 import SignUp from './User/SignUp';
-import Forgot from './User/Forgot';
-import Reset from './User/Reset';
-import Shop from './Shops/Shop';
 import Shops from './Shops/Shops';
 import Navbar from './Utils/Navbar';
+import Reviews from './Reviews/Reviews';
+import Profile from './User/Profile';
+import ShopDetail from './Shops/ShopDetail';
+import AddReview from './Reviews/AddReview';
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
+  const [id, setId] = useState();
+  const [shops, setShops] = useState();
+  const [reviews, setReviews] = useState();
+  const [shopReviews, setShopReviews] = useState();
+
+  const history = useHistory();
 
   useEffect(() => {
-    fetch("/auth").then((res) => {
+    fetch("/me").then((res) => {
       if (res.ok) {
-        res.json().then((user) => setCurrentUser(user));
+        res.json().then((user) => setUser(user));
       }
     })
   }, []);
 
-  //if (!currentUser) return <Login onLogin={setCurrentUser} />
-  //if (!currentUser) return <Shops />
+  useEffect(() => {
+    fetch("/shops")
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((shops) => setShops(shops));
+        }
+      })
+  }, []);
+
+  useEffect(() => {
+    fetch("/reviews")
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((reviews) => setReviews(reviews));
+        }
+      })
+  }, [])
+
+  console.log(shops)
+  console.log(reviews)
+  console.log(user)
+
+
+  if (!user) return <Login setUser={setUser} />
+
+  function handleLogout() {
+    fetch("/logout", {
+      method: "DELETE",
+    }).then((res) => {
+      if (res.ok) {
+        setUser(null);
+        history.push("./login")
+      }
+    });
+  }
+
 
   return (
-    <>
-      <Navbar />
-      <Switch>
-        <Route exact path="/" component={Shops} />
-        <Route exact path='/shops/${:id}' component={Shop} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/forgot" component={Forgot} />
-        <Route exact path="/reset" component={Reset} />
-        <Route exact path="/signup" component={SignUp} />
-      </Switch>
-    </>
+    <Context.Provider
+      value={{
+        user,
+        setUser,
+        id,
+        setId,
+        shops,
+        setShops,
+        reviews,
+        setReviews,
+        shopReviews,
+        setShopReviews
+      }}
+    >
+      <>
+        <Navbar handleLogout={handleLogout} user={user} id={id} />
+        <Switch>
+          <Route exact path="/shops">
+            <Shops shops={shops} />
+          </Route>
+          <Route exact path="/shops/:id">
+            <ShopDetail shops={shops} />
+          </Route>
+          <Route exact path="/reviews">
+            <Reviews shops={shops} setReviews={setReviews} user={user} />
+          </Route>
+          <Route exact path="/addreview">
+            <AddReview reviews={reviews} setReviews={setReviews} user={user} />
+          </Route>
+          <Route exact path="/me" >
+            <Profile user={user} />
+          </Route>
+          <Route exact path="/login">
+            <Login setUser={setUser} />
+          </Route>
+          <Route exact path="/signup">
+            <SignUp setUser={setUser} />
+          </Route>
+        </Switch>
+      </>
+    </Context.Provider >
   );
 }
 
