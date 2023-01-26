@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import Shop from './Shop';
 import Header from '../Utils/Header';
-// import airlinesQuery from '../../queries/airlinesQuery'
-import styled from 'styled-components'
-
+import styled from 'styled-components';
+import { Context } from '../Utils/Context';
 
 const Home = styled.div`
   text-align:center;
@@ -25,31 +24,25 @@ const Grid = styled.div`
   }
 `
 
-const Shops = () => {
-    const [shops, setShops] = useState([]);
-
-    useEffect(() => {
-        fetch('/shops')
-            .then(res => res.json())
-            .then(setShops)
-    }, [])
+const Shops = ({ user, shops }) => {
 
     console.log(shops)
 
     const grid = shops.map((shop, index) => {
-        const { id, name, image_url, slug, average_score } = shop
+        const { id, name, image_url } = shop
 
         return (
             <Shop
                 key={index}
                 name={name}
                 image_url={image_url}
-                slug={slug}
-                average_score={average_score}
                 id={id}
+                user={user}
+                shop={shop}
             />
         )
     })
+
 
     return (
         <Home>
