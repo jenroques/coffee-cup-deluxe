@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import { Route, Link } from 'react-router-dom'
+import { Button } from '@mui/material';
+import Auth from "../User/Auth"
 
 const Wrapper = styled.nav`
   width: 100%;
@@ -28,12 +30,14 @@ const Nav = styled.nav`
 const Left = styled.div`
   flex-basis: auto;
   align-self: flex-start !important;
+  margin-right: 30px
+  margin-left: 30px
 `
 
 const Right = styled.div`
   flex-basis: 12%;
   align-self: flex-end !important;
-  margin-right: 24px;
+  margin-right: 30px;
   a {
     color: #fff;
     text-decoration: none;
@@ -50,41 +54,53 @@ const Menu = styled.ul`
   list-style-type: none;
 `
 
-const Logo = styled.span`
-  font-size: 20px;
-  a {
-    font-size: inherit;
-    font-weight: inherit;
-    font-family: inherit;
-    color: #fff;
-    text-decoration: none;
-  }
-`
-const Navbar = ({ onLogout }) => {
-  function handleLogout() {
-    fetch("/logout", {
-      method: "DELETE",
-    }).then(() => onLogout());
-  }
+const Navbar = ({ handleLogout, user, id }) => {
 
   return (
     <Wrapper>
       <Container>
         <Nav>
-          <Left>
-            <Logo><Link to="/">Home</Link></Logo>
-          </Left>
           <Right>
             <Menu>
               <Fragment>
-                <li><Link to="/login">Login</Link></li>
-                <li><Link to="/signup">Signup</Link></li>
+                <li>
+                  {!user ? (
+                    <></>
+                  ) : (
+                    <>
+                      {" "}
+                      <Left>
+                        <Link to='/shops'>Shops</Link>
+                        <></>
+                        <Link to={`/users/${user.id}`}>Profile</Link>{" "}
+                      </Left>
+                    </>
+                  )}
+                  {!user ? (
+                    <></>
+                  ) : (
+                    <>
+                      {" "}
+                      <Right>
+                        <li><Link to="/login">Login</Link></li>
+                        <></>
+                        <li><Link to="/signup">Signup</Link></li>
+                      </Right>
+                    </>
+                  )}
+                  {!user ? <></> : <Auth user={user} />}
+                </li>
+                {!user ? <></> :
+                  <li>
+                    <Button className="button" onClick={handleLogout}>Logout</Button>
+                  </li>
+                }
               </Fragment>
             </Menu>
           </Right>
         </Nav>
       </Container>
-    </Wrapper>
+    </Wrapper >
   )
 
 }
