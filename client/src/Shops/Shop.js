@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
-import Rating from '../Reviews/Rating'
+import { Link, useLocation } from 'react-router-dom';
 
 const Card = styled.div`
   border: 1px solid #efefef;
@@ -47,21 +46,30 @@ const LinkWrapper = styled.div`
     }
   }
 `
-const Shop = ({ id, name, image_url, average_score, ...props }) => {
-    return (
-        <Card>
-            <ShopLogo>
-                <img src={image_url} alt={name} width="150" />
-            </ShopLogo>
-            <ShopName>
-                {name}
-            </ShopName>
-            <Rating score={average_score} />
-            <LinkWrapper>
-                <Link to={`/shops/${id}`}> Shop Details </Link>
-            </LinkWrapper>
-        </Card>
-    )
+const Shop = ({ shop, user }) => {
+
+
+  console.log(shop)
+
+
+  return (
+    <Card>
+      <ShopLogo>
+        <img src={shop.image_url} alt={shop.name} width="150" />
+      </ShopLogo>
+      <ShopName>
+        {shop.name}
+      </ShopName>
+      <LinkWrapper>
+        <Link to={{
+          pathname: `/shops/${shop.id}`,
+          state: {
+            shop
+          }
+        }}>Shop Details</Link>
+      </LinkWrapper>
+    </Card>
+  )
 }
 
 export default Shop
