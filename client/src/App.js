@@ -20,7 +20,9 @@ function App() {
     })
   }, []);
 
-  //if (!currentUser) return <Login setCurrentUser={setCurrentUser} />
+  //if (!currentUser) return <Login onLogin={setCurrentUser} />
+  //if (!currentUser) return <Shops />
+
   return (
     <>
       <Navbar />

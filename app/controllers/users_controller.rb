@@ -1,32 +1,17 @@
 class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
-
-  wrap_parameters format: []
+  #skip_before_action :authorize, only: :create
 
   def show
-      current_user = User.find(session[:user_id])
-    if current_user
-      render json: current_user
-    else
-      render json: { error: "Not authorized" }, status: :unauthorized
-    end
+    user = User.find(session[:user_id])
+    render json: user
   end
 
   def create
     user = User.create!(user_params)
+    session[:user_id]=user.id
     render json: user, status: :created
-  end
-
-  def update
-    user = find_user
-    user.update(password_update)
-    render json: user, status: :accepted
-    end
-
-  def destroy
-    session.delete :user_id
-    head :no_content
   end
 
   private
@@ -36,7 +21,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:name, :password)
+    params.permit(:name, :password, :password_confirmation)
   end
 
   def password_update

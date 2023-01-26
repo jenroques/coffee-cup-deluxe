@@ -1,7 +1,7 @@
 class ShopsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
-  skip_before_action :authorize, only: [:index]
+  #skip_before_action :authorize, only: [:index]
 
   def index
     shops = Shop.all
@@ -9,7 +9,7 @@ class ShopsController < ApplicationController
   end
 
   def show
-    shop = Shop.find_by(id: params[:id])
+    shop = find_shop
     render json: shop
   end
 
