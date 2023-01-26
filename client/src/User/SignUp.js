@@ -1,29 +1,44 @@
 import React, { useState } from 'react'
-import { CssBaseline, TextField, Link, Paper, Box, Grid, Typography, Avatar, Button, FormControlLabel, Container } from '@mui/material';
+import Error from "../Utils/Error"
+import { CssBaseline, TextField, Link, Box, Grid, Typography, Avatar, Button, Container } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useHistory } from 'react-router-dom';
 
-const SignUp = ({ onLogin }) => {
-    const [username, setUsername] = useState("");
+const SignUp = ({ setUser }) => {
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
+    const [errors, setErrors] = useState("");
+    const [isLoading, setIsLoading] = useState("");
+    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setErrors([]);
+        setIsLoading(true);
         fetch("/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                username,
+                name,
                 password,
-                passwordConfirmation: passwordConfirmation,
+                password_confirmation: passwordConfirmation,
+
             }),
-        })
-            .then((r) => r.json())
-            .then(onLogin);
+        }).then((r) => {
+            setIsLoading(false);
+            if (r.ok) {
+                r.json().then((user) => setUser(user));
+            } else {
+                r.json().then((err) => setErrors(err.errors));
+            }
+        });
     }
+
+    console.log(errors)
 
 
     const theme = createTheme();
@@ -56,9 +71,12 @@ const SignUp = ({ onLogin }) => {
                                     label="Username"
                                     name="name"
                                     autoComplete="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
+
                             </Grid>
-                            <Grid item xs={12} sm={6}></Grid>
+                            <Grid></Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
@@ -68,17 +86,21 @@ const SignUp = ({ onLogin }) => {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
                                     fullWidth
-                                    name="password"
+                                    name="password-confirmation"
                                     label="Confirm Password"
                                     type="password"
-                                    id="password"
+                                    id="password-confirmation"
                                     autoComplete="new-password"
+                                    value={passwordConfirmation}
+                                    onChange={(e) => setPasswordConfirmation(e.target.value)}
                                 />
                             </Grid>
                         </Grid>
@@ -88,7 +110,7 @@ const SignUp = ({ onLogin }) => {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign Up
+                            {isLoading ? "Loading..." : "Sign Up"}
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
@@ -97,6 +119,9 @@ const SignUp = ({ onLogin }) => {
                                 </Link>
                             </Grid>
                         </Grid>
+                        {/*} {errors.map((error) => (
+                            <Error key={error}>{error}</Error>
+                       ))} */}
                     </Box>
                 </Box>
             </Container>
