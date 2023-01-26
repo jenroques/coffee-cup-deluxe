@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { CssBaseline, TextField, Link, Paper, Box, Grid, Typography, Avatar, Button } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Error from "../Utils/Error";
+import { useHistory } from 'react-router-dom';
 
 function Copyright(props) {
     return (
@@ -18,21 +20,36 @@ function Copyright(props) {
 const theme = createTheme();
 
 
-const Login = ({ onLogin }) => {
+const Login = ({ setUser }) => {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const [errors, setErrors] = useState([]);
+    const history = useHistory();
 
-    const handleSubmit = (e) => {
+    function handleSubmit(e) {
         e.preventDefault();
+        setErrors([])
         fetch("/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name, password })
-        })
-            .then((res) => res.json())
-            .then((name, password) => onLogin(name, password))
+            body: JSON.stringify({
+                name,
+                password,
+            }),
+        }).then((res) => {
+            if (res.ok) {
+                res.json().then((user) => {
+                    history.push("/shops")
+                    setUser(user)
+                });
+            } else {
+                res.json().then((err) => setErrors(err.error));
+            }
+            setName("")
+            setPassword("")
+        });
     }
 
     return (
@@ -67,7 +84,7 @@ const Login = ({ onLogin }) => {
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h6">
-                            Sign into your Neighborhood Hub.
+                            Sign into your Neighborhood CoffeShop Hub.
                         </Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
                             <TextField
@@ -79,6 +96,8 @@ const Login = ({ onLogin }) => {
                                 name="name"
                                 autoComplete="name"
                                 autoFocus
+                                onChange={(e) => setName(e.target.value)}
+                                value={name}
                             />
                             <TextField
                                 margin="normal"
@@ -89,6 +108,8 @@ const Login = ({ onLogin }) => {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
                             />
                             <Button
                                 type="submit"
@@ -99,18 +120,16 @@ const Login = ({ onLogin }) => {
                                 Sign In
                             </Button>
                             <Grid container>
-                                <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link href="/signup" variant="h7">
                                         {"Don't have an account? Sign Up"}
                                     </Link>
                                 </Grid>
                             </Grid>
                             <Copyright sx={{ mt: 5 }} />
+                            {/*} {errors.map((error) => {
+                                <Error key={error}>{error}</Error>
+                            })} */}
                         </Box>
                     </Box>
                 </Grid>
