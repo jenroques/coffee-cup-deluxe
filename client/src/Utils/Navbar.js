@@ -1,106 +1,50 @@
 import React, { Fragment, useState } from 'react'
-import styled from 'styled-components'
 import { Route, Link } from 'react-router-dom'
-import { Button } from '@mui/material';
+import { AppBar, Button, ButtonGroup, Box, IconButton, Toolbar, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import Auth from "../User/Auth"
 
-const Wrapper = styled.nav`
-  width: 100%;
-  height: 65px;
-  line-height: 65px;
-  background-color: black;
-  color: white;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100%;
-`
 
-const Container = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1300px;
-`
 
-const Nav = styled.nav`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`
-
-const Left = styled.div`
-  flex-basis: auto;
-  align-self: flex-start !important;
-  margin-right: 30px
-  margin-left: 30px
-`
-
-const Right = styled.div`
-  flex-basis: 12%;
-  align-self: flex-end !important;
-  margin-right: 30px;
-  a {
-    color: #fff;
-    text-decoration: none;
-    cursor: pointer
-  }
-`
-
-const Menu = styled.ul`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding:0;
-  margin:0;
-  list-style-type: none;
-`
-
-const Navbar = ({ handleLogout, user, id }) => {
+const Navbar = ({ handleLogout, user, id, shops }) => {
 
   return (
-    <Wrapper>
-      <Container>
-        <Nav>
-          <Right>
-            <Menu>
-              <Fragment>
-                <li>
-                  {!user ? (
-                    <></>
-                  ) : (
-                    <>
-                      {" "}
-                      <Left>
-                        <Link to='/shops'>Shops</Link>
-                        <></>
-                        <Link to={`/users/${user.id}`}>Profile</Link>{" "}
-                      </Left>
-                    </>
-                  )}
-                  {!user ? (
-                    <></>
-                  ) : (
-                    <>
-                      {" "}
-                      <Right>
-                        <li><Link to="/login">Login</Link></li>
-                        <></>
-                        <li><Link to="/signup">Signup</Link></li>
-                      </Right>
-                    </>
-                  )}
-                  {!user ? <></> : <Auth user={user} />}
-                </li>
-                {!user ? <></> :
-                  <li>
-                    <Button className="button" onClick={handleLogout}>Logout</Button>
-                  </li>
-                }
-              </Fragment>
-            </Menu>
-          </Right>
-        </Nav>
-      </Container>
-    </Wrapper >
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" color="grey">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {!user ? (
+                <></>
+              ) : (
+                <>
+                  {" "}
+                  <ButtonGroup color="secondary" variant="text">
+                    <Link to='/shops'>
+                      <Button>Shops</Button>
+                    </Link>
+                    <Link to='/me'>
+                      <Button >Profile</Button>
+                    </Link>
+                  </ButtonGroup>
+                  {" "}
+                </>
+              )}
+              {!user ? (
+                <></>
+              ) : (
+                <>
+                </>
+              )}
+            </Typography>
+            {!user ? <></> :
+              <Button className="button" color="secondary" onClick={handleLogout}>Logout</Button>
+            }
+          </Toolbar>
+        </AppBar>
+      </Box>
+
+    </>
   )
 
 }
