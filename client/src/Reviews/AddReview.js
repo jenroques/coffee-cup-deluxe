@@ -6,25 +6,11 @@ import { Context } from '../Utils/Context';
 
 
 
-
-const ReviewWrapper = styled.div`
-  background:white;
-  padding:20px;
-  margin-left: 15px;
-  border-radius: 0;
-  padding-bottom:80px;
-  border-left: 1px solid rgba(0,0,0,0.1);
-  height: 100vh;
-  padding-top: 100px;
-  background: black;
-  padding-right: 80px;
-`
-
 const ReviewHeadline = styled.div`
   font-size:20px;
   padding: 15px 0;
   font-weight: bold;
-  color: #fff;
+  color: #000;
 `
 
 const Error = styled.div`
@@ -37,8 +23,17 @@ const Error = styled.div`
   padding: 4px;
 `
 
-const AddReview = ({ user }) => {
+
+const AddReview = ({ user, handleClose, setNewReviews, handleSubmit, handleChange, reviewCallbackHandle }) => {
   const { shopReviews, setReviews, reviews, setUser } = useContext(Context)
+  const location = useLocation();
+  const { shop } = location.state;
+  const history = useHistory();
+
+
+  console.log(user.id)
+  console.log(shopReviews.id)
+
   const defaultValues = {
     title: "",
     description: "",
@@ -46,68 +41,87 @@ const AddReview = ({ user }) => {
     shop_id: shopReviews.id || 0,
   }
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState(defaultValues);
+  const [errors, setErrors] = useState([]);
+
+  function handleChange(e) {
+    let name = e.target.name;
+    let value = e.target.value;
+    setForm({ ...form, [name]: value });
+  }
+
+
   function handleSubmit(e) {
     e.preventDefault();
-    setIsLoading(true);
+    setErrors([])
     fetch("/reviews", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        title,
-        description,
-        shop_id: shop.id
-      }),
-    }).then((r) => {
-      setIsLoading(false);
-      if (r.ok) {
-        history.push(`/shops/${shop.id}`);
+      body: JSON.stringify(form),
+    }).then((res) => {
+      if (res.ok) {
+        res.json().then((review) => {
+          setReviews([...reviews, review])
+          setUser({ ...user, shops: [...user.shops, review.shop] })
+          reviewCallbackHandle(review);
+        });
       } else {
-        r.json().then((err) => setErrors(err.errors));
+        res.json().then((err) => setErrors(err.error));
       }
+      setForm(defaultValues);
+      setNewReviews(reviews)
+      setIsLoading(false)
     });
+    handleClose();
   }
+
 
   console.log(shop)
 
   return (
-    <ReviewWrapper>
-      <Box
-        component="form"
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit}
-      >
-        <ReviewHeadline>Have An Experience with {shop.name}? Add Your Review!</ReviewHeadline>
-        <TextField
-          id="review-title"
-          defaultValue="Title"
-          label="Title"
-          multiline
-          maxRows={1}
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-        />
+
+    <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+      onSubmit={handleSubmit}
+    >
+      <ReviewHeadline>Have An Experience with {shopReviews.name}? Add Your Review!</ReviewHeadline>
+      <TextField
+        id="review-title"
+        defaultValue="Title"
+        label="Title"
+        multiline
+        maxRows={1}
+        onChange={handleChange}
+        value={form.title}
+        name='title'
+      />
+      <div>
         <TextField
           id="outlined-multiline-static"
           label="Description"
           multiline
           rows={4}
           defaultValue="Description"
-          onChange={(e) => setDescription(e.target.value)}
-          value={description}
+          onChange={handleChange}
+          value={form.description}
+          name='description'
         />
-        <Button type="submit">Create Review</Button>
-        {
-          errors &&
-          <Error>{errors}</Error>
-        }
-      </Box>
-    </ReviewWrapper>
+      </div>
+      <Button type="submit">Create Review</Button>
+      <Button onClick={handleClose}>Cancel</Button>
+      {
+        errors &&
+        <Error>{errors}</Error>
+      }
+    </Box>
   )
 }
 
