@@ -14,6 +14,7 @@ import AddReview from './Reviews/AddReview';
 function App() {
   const [user, setUser] = useState(null);
   const [id, setId] = useState();
+  const [shop, setShop] = useState();
   const [shops, setShops] = useState();
   const [reviews, setReviews] = useState();
   const [shopReviews, setShopReviews] = useState();
@@ -46,12 +47,17 @@ function App() {
       })
   }, [])
 
+
+
   console.log(shops)
   console.log(reviews)
   console.log(user)
+  console.log(shop)
 
 
-  if (!user) return <Login setUser={setUser} />
+  //if (!user) return <Login setUser={setUser} />
+
+
 
   function handleLogout() {
     fetch("/logout", {
@@ -65,6 +71,8 @@ function App() {
   }
 
 
+
+
   return (
     <Context.Provider
       value={{
@@ -72,6 +80,8 @@ function App() {
         setUser,
         id,
         setId,
+        shop,
+        setShop,
         shops,
         setShops,
         reviews,
@@ -83,17 +93,20 @@ function App() {
       <>
         <Navbar handleLogout={handleLogout} user={user} id={id} />
         <Switch>
+          <Route exact path="/">
+            <Login setUser={setUser} />
+          </Route>
           <Route exact path="/shops">
-            <Shops shops={shops} />
+            <Shops shops={shops} shop={shop} setShop={setShop} />
           </Route>
           <Route exact path="/shops/:id">
-            <ShopDetail shops={shops} />
+            <ShopDetail shops={shops} shop={shop} setShop={setShop} setShopReviews={setShopReviews} shopReviews={shopReviews} />
           </Route>
           <Route exact path="/reviews">
-            <Reviews shops={shops} setReviews={setReviews} user={user} />
+            <Reviews shop={shop} setReviews={setReviews} user={user} />
           </Route>
           <Route exact path="/addreview">
-            <AddReview reviews={reviews} setReviews={setReviews} user={user} />
+            <AddReview reviews={reviews} setReviews={setReviews} user={user} shop={shop} />
           </Route>
           <Route exact path="/me" >
             <Profile user={user} />
