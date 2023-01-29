@@ -9,7 +9,7 @@ const SignUp = ({ setUser }) => {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
-    const [errors, setErrors] = useState("");
+    const [errors, setErrors] = useState([]);
     const [isLoading, setIsLoading] = useState("");
     const history = useHistory();
 
