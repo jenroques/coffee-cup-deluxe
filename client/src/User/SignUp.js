@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Error from "../Utils/Error"
-import { CssBaseline, TextField, Link, Box, Grid, Typography, Avatar, Button, Container } from '@mui/material';
+import { Alert, CssBaseline, TextField, Box, Link, Grid, Typography, Avatar, Button, Container } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useHistory } from 'react-router-dom';
@@ -26,14 +26,14 @@ const SignUp = ({ setUser }) => {
                 name,
                 password,
                 password_confirmation: passwordConfirmation,
-
             }),
         }).then((r) => {
             setIsLoading(false);
             if (r.ok) {
                 r.json().then((user) => setUser(user));
+                history.push("/shops")
             } else {
-                r.json().then((err) => setErrors(err.errors));
+                r.json().then((err) => setErrors(Object.entries(err.error).flat()));
             }
         });
     }
@@ -63,7 +63,7 @@ const SignUp = ({ setUser }) => {
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={12}>
                                 <TextField
                                     required
                                     fullWidth
@@ -76,7 +76,7 @@ const SignUp = ({ setUser }) => {
                                 />
 
                             </Grid>
-                            <Grid></Grid>
+
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
@@ -119,9 +119,9 @@ const SignUp = ({ setUser }) => {
                                 </Link>
                             </Grid>
                         </Grid>
-                        {/*} {errors.map((error) => (
-                            <Error key={error}>{error}</Error>
-                       ))} */}
+                        {errors.map((error) => {
+                            return <Alert key={error} severity="error" className='error'>{error}</Alert>
+                        })}
                     </Box>
                 </Box>
             </Container>
