@@ -1,5 +1,12 @@
-# Project Template: React/Rails API
+# Coffee Cup Deluxe 
 
-## Description
+## Neighborhood Coffeeshop Hub
+
+Keep track of all your favorite shops, post reviews and see other members reviews as well! 
 
 
+
+
+Made with: 
+MUI 
+Project Template: React/Rails API 
