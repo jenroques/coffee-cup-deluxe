@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CssBaseline, TextField, Link, Paper, Box, Grid, Typography, Avatar, Button } from '@mui/material';
+import { Alert, CssBaseline, TextField, Link, Paper, Box, Grid, Typography, Avatar, Button, Snackbar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Error from "../Utils/Error";
@@ -26,6 +26,9 @@ const Login = ({ setUser }) => {
     const [errors, setErrors] = useState([]);
     const history = useHistory();
 
+    console.log(errors)
+
+
     function handleSubmit(e) {
         e.preventDefault();
         setErrors([])
@@ -41,11 +44,11 @@ const Login = ({ setUser }) => {
         }).then((res) => {
             if (res.ok) {
                 res.json().then((user) => {
-                    history.push("/shops")
                     setUser(user)
+                    history.push('/shops')
                 });
             } else {
-                res.json().then((err) => setErrors(err.error));
+                res.json().then((err) => setErrors(Object.entries(err.error).flat()));
             }
             setName("")
             setPassword("")
@@ -116,6 +119,7 @@ const Login = ({ setUser }) => {
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
+                                color="grey"
                             >
                                 Sign In
                             </Button>
@@ -127,9 +131,9 @@ const Login = ({ setUser }) => {
                                 </Grid>
                             </Grid>
                             <Copyright sx={{ mt: 5 }} />
-                            {/*} {errors.map((error) => {
-                                <Error key={error}>{error}</Error>
-                            })} */}
+                            {errors.map((error) => {
+                                return <Alert key={error} severity="error" className='error'>{error}</Alert>
+                            })}
                         </Box>
                     </Box>
                 </Grid>
