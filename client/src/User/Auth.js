@@ -2,7 +2,7 @@ import React from 'react'
 
 const Auth = ({ user }) => {
     return (
-        <div>{`Logged In: ${user.name}`}</div>
+        <h6>{`Logged In: ${user.name}`}</h6>
     )
 }
 
