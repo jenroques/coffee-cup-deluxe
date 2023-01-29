@@ -1,38 +1,69 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { Link, useLocation, } from "react-router-dom";
+import { Button, Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Modal, Typography } from "@mui/material";
 import { Context } from '../Utils/Context';
+import AddReview from "../Reviews/AddReview";
 
-const ShopDetail = ({ shops }) => {
-    const { setShopReviews } = useContext(Context);
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
+
+const ShopDetail = (props) => {
+    const { setShopReviews, shopReviews, setReviews, user, reviews, setShop } = useContext(Context);
     const location = useLocation();
     const { shop } = location.state;
+    const [open, setOpen] = React.useState(false);
+    const [newReviews, setNewReviews] = useState();
+    const [currentShop, setCurrentShop] = useState({});
 
-    const [shopDetail, setShopDetail] = useState();
-
+    const handleClose = () => {
+        setOpen(false);
+        setNewReviews(reviews)
+    }
 
     useEffect(() => {
         fetch(`/shops/${shop.id}`)
             .then((res) => res.json())
-            .then((shopDetail) => setShopDetail(shopDetail))
+            .then((currentShop) => setCurrentShop(currentShop))
     }, [])
+
+    useEffect(() => {
+        setShopReviews(shop)
+    }, [setShopReviews]);
 
     const handleClick = () => {
         setShopReviews(shop)
+        setOpen(true);
+    }
+
+    const reviewCallbackHandle = async () => {
+        fetch(`/shops/${shop.id}`)
+            .then((res) => res.json())
+            .then((currentShop) => setCurrentShop(currentShop))
     }
 
     console.log(shop)
-    console.log(shopDetail)
+    console.log(shopReviews)
+
 
     return (
         <>
 
-            <Card sx={{ ml: 30, mr: 30, maxWidth: 900 }}>
+            <Card sx={{ mt: 10, ml: 30, mr: 30, maxWidth: 900 }}>
                 <CardActionArea>
                     <CardMedia
                         sx={{ mt: 5 }}
                         component="img"
-                        height="200"
+                        height="150"
                         image={shop.image_url}
                         alt={shop.name}
                     />
@@ -41,7 +72,7 @@ const ShopDetail = ({ shops }) => {
                             {shop.name}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {shop.reviews && shop.reviews.map((review, index) => {
+                            {currentShop.reviews && currentShop.reviews.map((review, index) => {
                                 return (
                                     <>
                                         <Card key={index}>
@@ -55,13 +86,30 @@ const ShopDetail = ({ shops }) => {
                                     </>
                                 )
                             })}
-
                         </Typography>
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-                    <Link to="/addreview">
-                        <Button onClick={handleClick}>Add Review</Button>
+                    <Button onClick={handleClick}>Add Review</Button>
+                    <Modal
+                        keepMounted
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-review"
+                        aria-describedby="modal-review"
+                    >
+                        <div>
+                            <Box sx={style}>
+                                <AddReview shop={shop} reviews={reviews} setReviews={setReviews} user={user} open={open} setOpen={setOpen} handleClose={handleClose} setNewReviews={setNewReviews} reviewCallbackHandle={reviewCallbackHandle} />
+                            </Box>
+                        </div>
+                    </Modal>
+                    {/* </Link> */}
+                    <Link to={{
+                        pathname: "/shops",
+                    }}
+                    >
+                        <Button>Back</Button>
                     </Link>
                 </CardActions>
             </Card>
