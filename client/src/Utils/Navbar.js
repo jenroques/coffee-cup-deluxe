@@ -38,7 +38,9 @@ const Navbar = ({ handleLogout, user, id, shops }) => {
               )}
             </Typography>
             {!user ? <></> :
-              <Button className="button" color="secondary" onClick={handleLogout}>Logout</Button>
+              <Link to='/logout'>
+                <Button className="button" color="secondary" onClick={handleLogout}>Logout</Button>
+              </Link>
             }
           </Toolbar>
         </AppBar>
