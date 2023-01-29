@@ -117,10 +117,10 @@ const AddReview = ({ user, handleClose, setNewReviews, handleSubmit, handleChang
       </div>
       <Button type="submit">Create Review</Button>
       <Button onClick={handleClose}>Cancel</Button>
-      {
+      {/* {
         errors &&
         <Error>{errors}</Error>
-      }
+      } */}
     </Box>
   )
 }
