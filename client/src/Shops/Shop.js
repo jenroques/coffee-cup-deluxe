@@ -26,12 +26,12 @@ const LinkWrapper = styled.div`
   height:50px;
   a {
     color: #fff;
-    background-color: #71b406;
+    background-color: #d49adb;
     border-radius: 4px;
     padding: 10px 50px;
     cursor: pointer;
     border-radius: 3px;
-    border: 1px solid #71b406;
+    border: 1px solid #d49adb;
     text-align: center;
     line-height: 20px;
     min-height: 40px;
@@ -41,15 +41,16 @@ const LinkWrapper = styled.div`
     width: 100%;
     transition: ease-in-out 0.1s;
     &:hover{
-      border-color: #619a07;
-      background: #619a07;
+      border-color: #d49adb;
+      background: #d49adb;
     }
   }
 `
-const Shop = ({ shop, user }) => {
+const Shop = ({ shop, ...props }) => {
 
 
   console.log(shop)
+
 
 
   return (
@@ -66,7 +67,8 @@ const Shop = ({ shop, user }) => {
           state: {
             shop
           }
-        }}>Shop Details</Link>
+        }} onClick={() => props.setShop(shop)}
+        >Shop Details</Link>
       </LinkWrapper>
     </Card>
   )
