@@ -13,6 +13,12 @@ class ShopsController < ApplicationController
     render json: shop
   end
 
+  def create
+    shop = Shop.create(name: params[:name], image_url: params[:image_url] )
+    render json: shop, status: :created
+  end
+
+
   private
 
   def find_shop
