@@ -24,7 +24,7 @@ const Grid = styled.div`
   }
 `
 
-const Shops = ({ user, shops }) => {
+const Shops = ({ user, shops, shop, setShop }) => {
 
     console.log(shops)
 
@@ -39,6 +39,7 @@ const Shops = ({ user, shops }) => {
                 id={id}
                 user={user}
                 shop={shop}
+                setShop={setShop}
             />
         )
     })
