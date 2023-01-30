@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, CssBaseline, TextField, Link, Paper, Box, Grid, Typography, Avatar, Button, Snackbar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Error from "../Utils/Error";
 import { useHistory } from 'react-router-dom';
+import { Context } from '../Utils/Context';
 
 function Copyright(props) {
     return (
@@ -20,11 +21,12 @@ function Copyright(props) {
 const theme = createTheme();
 
 
-const Login = ({ setUser }) => {
+const Login = ({ }) => {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState([]);
     const history = useHistory();
+    const { setUser } = useContext(Context)
 
     console.log(errors)
 

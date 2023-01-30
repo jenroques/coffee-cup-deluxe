@@ -44,6 +44,7 @@ const Shops = ({ user, shops, setShop }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
 
+
   const defaultValues = {
     name: "",
     image_url: "",
