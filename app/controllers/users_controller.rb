@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
    rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
-   #skip_before_action :authorize, only: :create :show
+   skip_before_action :authorize, only: :create
 
   def show
     user = User.find(session[:user_id])
