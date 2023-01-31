@@ -1,58 +1,63 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
-import { Route, Switch, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { Context } from "./Utils/Context";
-import Login from "./User/Login";
-import SignUp from "./User/SignUp";
-import Shops from "./Shops/Shops";
-import Navbar from "./Utils/Navbar";
-import Reviews from "./Reviews/Reviews";
-import Profile from "./User/Profile";
-import ShopDetail from "./Shops/ShopDetail";
-import AddReview from "./Reviews/AddReview";
+import Login from './User/Login';
+import SignUp from './User/SignUp';
+import Shops from './Shops/Shops';
+import Navbar from './Utils/Navbar';
+import Reviews from './Reviews/Reviews';
+import Profile from './User/Profile';
+import ShopDetail from './Shops/ShopDetail';
+import AddReview from './Reviews/AddReview';
 
 function App() {
-  const [user, setUser] = useState(undefined);
-  const [id, setId] = useState(undefined);
-  const [shop, setShop] = useState(undefined);
-  const [shops, setShops] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [shopReviews, setShopReviews] = useState([]);
+  const [user, setUser] = useState(null);
+  const [id, setId] = useState();
+  const [shop, setShop] = useState();
+  const [shops, setShops] = useState();
+  const [reviews, setReviews] = useState();
+  const [shopReviews, setShopReviews] = useState();
 
   const history = useHistory();
 
-  const loadUser = () => {
+  useEffect(() => {
     fetch("/me").then((res) => {
       if (res.ok) {
-        res.json().then((json) => setUser(json));
+        res.json().then((user) => setUser(user));
       }
-    });
-  }
-  useEffect(() => {
-    console.log("Load resource useEffect")
-    const resources = [
-      { path: "/me", setter: setUser },
-      { path: "/shops", setter: setShops },
-      { path: "/reviews", setter: setReviews },
-    ];
-    Promise.all(
-      resources.map((resource) => {
-        fetch(resource.path).then((res) => {
-          if (res.ok) {
-            res.json().then((json) => resource.setter(json));
-          }
-        });
-      })
-    );
+    })
   }, []);
-  /*
-    console.log(shops);
-    console.log(reviews);
-    console.log(user);
-    console.log(shop);
-    */
+
+  useEffect(() => {
+    fetch("/shops")
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((shops) => setShops(shops));
+        }
+      })
+  }, []);
+
+  useEffect(() => {
+    fetch("/reviews")
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((reviews) => setReviews(reviews));
+        }
+      })
+  }, [])
+
+
+
+  console.log(shops)
+  console.log(reviews)
+  console.log(user)
+  console.log(shop)
+
 
   //if (!user) return <Login setUser={setUser} />
+
+
 
   function handleLogout() {
     fetch("/logout", {
@@ -60,16 +65,18 @@ function App() {
     }).then((res) => {
       if (res.ok) {
         setUser(null);
-        history.push("./login");
+        history.push("./login")
       }
     });
   }
+
+
+
 
   return (
     <Context.Provider
       value={{
         user,
-        loadUser,
         setUser,
         id,
         setId,
@@ -80,40 +87,29 @@ function App() {
         reviews,
         setReviews,
         shopReviews,
-        setShopReviews,
+        setShopReviews
       }}
     >
       <>
         <Navbar handleLogout={handleLogout} user={user} id={id} />
         <Switch>
           <Route exact path="/">
-            <Login />
+            <Login setUser={setUser} />
           </Route>
           <Route exact path="/shops">
             <Shops shops={shops} shop={shop} setShop={setShop} />
           </Route>
           <Route exact path="/shops/:id">
-            <ShopDetail
-              shops={shops}
-              shop={shop}
-              setShop={setShop}
-              setShopReviews={setShopReviews}
-              shopReviews={shopReviews}
-            />
+            <ShopDetail shops={shops} shop={shop} setShop={setShop} setShopReviews={setShopReviews} shopReviews={shopReviews} />
           </Route>
           <Route exact path="/reviews">
             <Reviews shop={shop} setReviews={setReviews} user={user} />
           </Route>
           <Route exact path="/addreview">
-            <AddReview
-              reviews={reviews}
-              setReviews={setReviews}
-              user={user}
-              shop={shop}
-            />
+            <AddReview reviews={reviews} setReviews={setReviews} user={user} shop={shop} />
           </Route>
-          <Route exact path="/me">
-            <Profile />
+          <Route exact path="/me" >
+            <Profile user={user} />
           </Route>
           <Route exact path="/login">
             <Login setUser={setUser} />
@@ -123,7 +119,7 @@ function App() {
           </Route>
         </Switch>
       </>
-    </Context.Provider>
+    </Context.Provider >
   );
 }
 

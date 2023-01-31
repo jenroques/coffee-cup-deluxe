@@ -4,13 +4,10 @@ import { Button, Modal, CssBaseline, Box, Toolbar, Typography, Divider, Containe
 
 import EditReview from '../Reviews/EditReview';
 import ShopDetail from '../Shops/ShopDetail';
-import { useContext } from 'react';
-import { Context } from '../Utils/Context';
 
 
-const Profile = ({ }) => {
-    const { user, loadUser, setUser } = useContext(Context)
-    //const [userProfile, setUser] = useState(user)
+const Profile = ({ user }) => {
+    const [userProfile, setUserProfile] = useState(user)
     const [editOpen, setEditOpen] = useState(false)
     const [currentReview, setCurrentReview] = useState({})
 
@@ -28,8 +25,13 @@ const Profile = ({ }) => {
         p: 4,
     };
 
+    useEffect(() => {
+        fetch(`/users/${user.id}`)
+            .then(res => res.json())
+            .then((userProfile) => setUserProfile(userProfile))
+    }, [])
 
-    console.log(user)
+    console.log(userProfile)
 
     const handleOpen = () => setEditOpen(true);
     const handleClose = () => setEditOpen(false);
@@ -49,14 +51,11 @@ const Profile = ({ }) => {
     );
 
     const reviewCallbackHandle = async () => {
-        // fetch(`/users/${user.id}`)
-        //     .then((res) => res.json())
-        //     .then((userData) => loadUser)
-        loadUser()
+        fetch(`/users/${user.id}`)
+            .then((res) => res.json())
+            .then((userProfile) => setUserProfile(userProfile))
     }
-    if (!user) {
-        return null
-    }
+
     return (
         <ThemeProvider theme={mdTheme}>
             <Box sx={{}}>
@@ -98,13 +97,13 @@ const Profile = ({ }) => {
                                     <h4>Review Manager</h4>
                                     <p>Update or delete your reviews.</p>
                                     {
-                                        user.shops.map((shop, index) => (
+                                        userProfile.shops.map((shop, index) => (
                                             <div key={shop.id}>
                                                 <p>{shop.name}</p>
                                                 <p>{shop.description}</p>
                                                 <div>
                                                     {
-                                                        user.reviews.filter(review => review.shop_id === shop.id).map((review, index1) => (
+                                                        userProfile.reviews.filter(review => review.shop_id === shop.id).map((review, index1) => (
                                                             <div key={review.id}>
                                                                 <ul>
                                                                     <li>

@@ -1,7 +1,7 @@
 class ShopsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_record
-  skip_before_action :authorize, only: [:index, :create]
+  skip_before_action :authorize, only: [:index, :create, :destroy]
 
   def index
     puts "!!! index"
@@ -17,6 +17,13 @@ class ShopsController < ApplicationController
   def create
     shop = Shop.create(name: params[:name], image_url: params[:image_url] )
     render json: shop, status: :created
+  end
+
+  def destroy
+    review = find_shop
+    review
+    review.destroy
+    head :no_content
   end
 
 
