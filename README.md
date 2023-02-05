@@ -4,6 +4,31 @@
 
 Keep track of all your favorite shops, post reviews and see other's reviews as well! 
 
+### Initial Setup: 
+Open your termial, CD into the project directory and enter the following commands: 
+
+bundle install
+
+npm install --prefix client
+
+### Initalize Database:
+
+rails db:drop
+
+rails db:create
+
+rails db:migrate
+
+### Seeds
+
+rails db:seed
+
+### Run Application:
+
+rails s
+
+npm start --prefix client
+
 ### Functionality: 
 
 Create an account & login for full access. 
