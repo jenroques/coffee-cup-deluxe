@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Error from "../Utils/Error"
 import { Alert, CssBaseline, TextField, Box, Link, Grid, Typography, Avatar, Button, Container } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useHistory } from 'react-router-dom';
+import { Context } from '../Utils/Context';
 
 const SignUp = ({ setUser }) => {
     const [name, setName] = useState("");
@@ -12,6 +13,7 @@ const SignUp = ({ setUser }) => {
     const [errors, setErrors] = useState([]);
     const [isLoading, setIsLoading] = useState("");
     const history = useHistory();
+    const { setIsLoggedIn } = useContext(Context)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,12 +35,13 @@ const SignUp = ({ setUser }) => {
                 r.json().then((user) => setUser(user));
                 history.push("/shops")
             } else {
-                r.json().then((err) => setErrors(Object.entries(err.error).flat()));
+                r.json().then((err) => setErrors(Object.values(err.error).flat()));
             }
+            setIsLoggedIn(true)
         });
     }
 
-    console.log(errors)
+    // console.log(errors)
 
 
     const theme = createTheme();

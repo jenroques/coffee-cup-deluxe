@@ -17,8 +17,8 @@ const style = {
 };
 
 
-const ShopDetail = (props) => {
-    const { setShopReviews, shopReviews, setReviews, user, reviews, setShop } = useContext(Context);
+const ShopDetail = () => {
+    const { setShopReviews, setReviews, user, users, reviews } = useContext(Context);
     const location = useLocation();
     const { shop } = location.state;
     const [open, setOpen] = React.useState(false);
@@ -34,11 +34,11 @@ const ShopDetail = (props) => {
         fetch(`/shops/${shop.id}`)
             .then((res) => res.json())
             .then((currentShop) => setCurrentShop(currentShop))
-    }, [])
+    }, [shop])
 
     useEffect(() => {
         setShopReviews(shop)
-    }, [setShopReviews]);
+    }, [shop, setShopReviews]);
 
     const handleClick = () => {
         setShopReviews(shop)
@@ -50,10 +50,6 @@ const ShopDetail = (props) => {
             .then((res) => res.json())
             .then((currentShop) => setCurrentShop(currentShop))
     }
-
-    console.log(shop)
-    console.log(shopReviews)
-
 
     return (
         <>
@@ -72,18 +68,20 @@ const ShopDetail = (props) => {
                             {shop.name}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {currentShop.reviews && currentShop.reviews.map((review, index) => {
+                            {currentShop.reviews && currentShop.reviews.map(review => {
+                                const profile_name = users.find(profile_name => profile_name.id === review.user_id)
                                 return (
-                                    <>
-                                        <Card key={index}>
+                                    <div>
+                                        <Card key={review.id}>
                                             <ul>
                                                 <li>
-                                                    <h4>{review.title}</h4>
-                                                    <h5>{review.description}</h5>
+                                                    <h3>{review.title}</h3>
+                                                    <h4>{review.description}</h4>
+                                                    <h5> - {profile_name.name}</h5>
                                                 </li>
                                             </ul>
                                         </Card>
-                                    </>
+                                    </div>
                                 )
                             })}
                         </Typography>
@@ -104,7 +102,6 @@ const ShopDetail = (props) => {
                             </Box>
                         </div>
                     </Modal>
-                    {/* </Link> */}
                     <Link to={{
                         pathname: "/shops",
                     }}

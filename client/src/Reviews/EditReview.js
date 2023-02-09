@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../Utils/Context';
-import { Button, Box, TextField, Tooltip, Icon } from '@mui/material';
+import { Button, TextField, Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const EditReview = ({ user, review, handleClose, reviewCallbackHandle }) => {
-    const { shopReviews, setReviews, reviews, setUser, } = useContext(Context)
+const EditReview = ({ review, handleClose, reviewCallbackHandle }) => {
+    const { setReviews, reviews } = useContext(Context)
     const [errors, setErrors] = useState();
 
     const [form, setForm] = useState({
@@ -13,8 +13,6 @@ const EditReview = ({ user, review, handleClose, reviewCallbackHandle }) => {
         comment: "",
         rating: 0
     });
-
-    console.log(review)
 
     useEffect(() => {
         setForm(review)
@@ -67,7 +65,6 @@ const EditReview = ({ user, review, handleClose, reviewCallbackHandle }) => {
             },
             body: JSON.stringify(),
         }).then((res) => {
-            console.log("response", res)
             if (res.ok) {
 
                 const newReviews = reviews.filter((rev) => rev.id !== review.id)
@@ -106,18 +103,10 @@ const EditReview = ({ user, review, handleClose, reviewCallbackHandle }) => {
                 <div>
                     <Button className='btn' color="secondary" type="submit">Update Review</Button>
                 </div>
-                {/* {errors.map((error) => {
-          return (
-            <span key={error} className='error'>
-              {error}
-            </span>
-          );
-        })} */}
-                {/* <Button className='btn' onClick={handleCancel}>Cancel</Button> */}
             </form>
             <Tooltip title="Delete Review">
-                <IconButton>
-                    <DeleteIcon onClick={handleDeleteClick} />
+                <IconButton onClick={handleDeleteClick}>
+                    <DeleteIcon />
                 </IconButton>
             </Tooltip>
         </div>

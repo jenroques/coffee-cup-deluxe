@@ -6,18 +6,19 @@ import Login from './User/Login';
 import SignUp from './User/SignUp';
 import Shops from './Shops/Shops';
 import Navbar from './Utils/Navbar';
-import Reviews from './Reviews/Reviews';
 import Profile from './User/Profile';
 import ShopDetail from './Shops/ShopDetail';
 import AddReview from './Reviews/AddReview';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [id, setId] = useState();
-  const [shop, setShop] = useState();
-  const [shops, setShops] = useState();
-  const [reviews, setReviews] = useState();
-  const [shopReviews, setShopReviews] = useState();
+  const [user, setUser] = useState({});
+  const [users, setUsers] = useState([])
+  const [id, setId] = useState(undefined);
+  const [shop, setShop] = useState([]);
+  const [shops, setShops] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [shopReviews, setShopReviews] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const history = useHistory();
 
@@ -47,17 +48,19 @@ function App() {
       })
   }, [])
 
+  useEffect(() => {
+    fetch("/users")
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((users) => setUsers(users));
+        }
+      })
+  }, []);
 
-
-  console.log(shops)
-  console.log(reviews)
-  console.log(user)
-  console.log(shop)
-
-
-  //if (!user) return <Login setUser={setUser} />
-
-
+  // console.log(shops)
+  // console.log(reviews)
+  // console.log(user)
+  // console.log(shop)
 
   function handleLogout() {
     fetch("/logout", {
@@ -67,15 +70,18 @@ function App() {
         setUser(null);
         history.push("./login")
       }
+      setIsLoggedIn(false)
     });
   }
 
 
+  // if (!user) return <Login setUser={setUser} />
 
 
   return (
     <Context.Provider
       value={{
+        users,
         user,
         setUser,
         id,
@@ -87,23 +93,22 @@ function App() {
         reviews,
         setReviews,
         shopReviews,
-        setShopReviews
+        setShopReviews,
+        isLoggedIn,
+        setIsLoggedIn
       }}
     >
       <>
         <Navbar handleLogout={handleLogout} user={user} id={id} />
         <Switch>
           <Route exact path="/">
-            <Login setUser={setUser} />
+            <Login setUser={setUser} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route exact path="/shops">
             <Shops shops={shops} shop={shop} setShop={setShop} />
           </Route>
           <Route exact path="/shops/:id">
-            <ShopDetail shops={shops} shop={shop} setShop={setShop} setShopReviews={setShopReviews} shopReviews={shopReviews} />
-          </Route>
-          <Route exact path="/reviews">
-            <Reviews shop={shop} setReviews={setReviews} user={user} />
+            <ShopDetail shops={shops} shop={shop} setShop={setShop} setShopReviews={setShopReviews} shopReviews={shopReviews} user={user} users={users} />
           </Route>
           <Route exact path="/addreview">
             <AddReview reviews={reviews} setReviews={setReviews} user={user} shop={shop} />
@@ -112,7 +117,7 @@ function App() {
             <Profile user={user} />
           </Route>
           <Route exact path="/login">
-            <Login setUser={setUser} />
+            <Login setUser={setUser} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route exact path="/signup">
             <SignUp setUser={setUser} />

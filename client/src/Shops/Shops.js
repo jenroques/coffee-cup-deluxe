@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import Shop from './Shop';
 import Header from '../Utils/Header';
 import styled from 'styled-components';
@@ -51,7 +51,6 @@ const Shops = ({ user, shops, setShop }) => {
   }
 
   const [form, setForm] = useState(defaultValues)
-  console.log(shops)
 
   const handleClose = () => {
     setOpen(false);

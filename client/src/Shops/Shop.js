@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Card = styled.div`
   border: 1px solid #efefef;
@@ -47,11 +47,6 @@ const LinkWrapper = styled.div`
   }
 `
 const Shop = ({ shop, ...props }) => {
-
-
-  console.log(shop)
-
-
 
   return (
     <Card>

@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, TextField } from '@mui/material';
 import { Context } from '../Utils/Context';
@@ -13,26 +12,9 @@ const ReviewHeadline = styled.div`
   color: #000;
 `
 
-const Error = styled.div`
-  width: 100%;
-  color: rgb(255, 80, 44);
-  border: 1px solid rgb(255, 80, 44);
-  border-radius: 4px;
-  margin-top: 8px;
-  text-align:center;
-  padding: 4px;
-`
 
-
-const AddReview = ({ user, handleClose, setNewReviews, handleSubmit, handleChange, reviewCallbackHandle }) => {
+const AddReview = ({ user, handleClose, setNewReviews, reviewCallbackHandle }) => {
   const { shopReviews, setReviews, reviews, setUser } = useContext(Context)
-  const location = useLocation();
-  const { shop } = location.state;
-  const history = useHistory();
-
-
-  console.log(user.id)
-  console.log(shopReviews.id)
 
   const defaultValues = {
     title: "",
@@ -78,9 +60,6 @@ const AddReview = ({ user, handleClose, setNewReviews, handleSubmit, handleChang
     handleClose();
   }
 
-
-  console.log(shop)
-
   return (
 
     <Box
@@ -95,7 +74,6 @@ const AddReview = ({ user, handleClose, setNewReviews, handleSubmit, handleChang
       <ReviewHeadline>Have An Experience with {shopReviews.name}? Add Your Review!</ReviewHeadline>
       <TextField
         id="review-title"
-        defaultValue="Title"
         label="Title"
         multiline
         maxRows={1}
@@ -109,7 +87,6 @@ const AddReview = ({ user, handleClose, setNewReviews, handleSubmit, handleChang
           label="Description"
           multiline
           rows={4}
-          defaultValue="Description"
           onChange={handleChange}
           value={form.description}
           name='description'
@@ -117,10 +94,6 @@ const AddReview = ({ user, handleClose, setNewReviews, handleSubmit, handleChang
       </div>
       <Button type="submit">Create Review</Button>
       <Button onClick={handleClose}>Cancel</Button>
-      {/* {
-        errors &&
-        <Error>{errors}</Error>
-      } */}
     </Box>
   )
 }

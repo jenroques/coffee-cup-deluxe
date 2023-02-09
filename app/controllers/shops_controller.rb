@@ -4,7 +4,6 @@ class ShopsController < ApplicationController
   skip_before_action :authorize, only: [:index, :create, :destroy]
 
   def index
-    puts "!!! index"
     shops = Shop.all
     render json: shops
   end
@@ -20,9 +19,9 @@ class ShopsController < ApplicationController
   end
 
   def destroy
-    review = find_shop
-    review
-    review.destroy
+    shop = find_shop
+    shop
+    shop.destroy
     head :no_content
   end
 

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Alert, CssBaseline, TextField, Link, Paper, Box, Grid, Typography, Avatar, Button, Snackbar } from '@mui/material';
+import { Alert, CssBaseline, TextField, Link, Paper, Box, Grid, Typography, Avatar, Button } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Error from "../Utils/Error";
@@ -21,14 +21,14 @@ function Copyright(props) {
 const theme = createTheme();
 
 
-const Login = ({ }) => {
+const Login = () => {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState([]);
     const history = useHistory();
-    const { setUser } = useContext(Context)
+    const { setUser, setIsLoggedIn } = useContext(Context)
 
-    console.log(errors)
+    // console.log(errors)
 
 
     function handleSubmit(e) {
@@ -48,12 +48,14 @@ const Login = ({ }) => {
                 res.json().then((user) => {
                     setUser(user)
                     history.push('/shops')
+                    setIsLoggedIn(true)
                 });
             } else {
-                res.json().then((err) => setErrors(Object.entries(err.error).flat()));
+                res.json().then((err) => setErrors(err.error));
             }
             setName("")
             setPassword("")
+
         });
     }
 

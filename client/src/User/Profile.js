@@ -1,9 +1,9 @@
-import React, { useEffect, useState, Fragment } from 'react'
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import { Button, Modal, CssBaseline, Box, Toolbar, Typography, Divider, Container, Grid, Grow, Paper } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Button, Modal, CssBaseline, Box, Toolbar, Typography, Divider, Container, Grid, Paper } from '@mui/material';
 
 import EditReview from '../Reviews/EditReview';
-import ShopDetail from '../Shops/ShopDetail';
+
 
 
 const Profile = ({ user }) => {
@@ -30,8 +30,6 @@ const Profile = ({ user }) => {
             .then(res => res.json())
             .then((userProfile) => setUserProfile(userProfile))
     }, [])
-
-    console.log(userProfile)
 
     const handleOpen = () => setEditOpen(true);
     const handleClose = () => setEditOpen(false);
@@ -94,27 +92,24 @@ const Profile = ({ user }) => {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <h4>Review Manager</h4>
-                                    <p>Update or delete your reviews.</p>
+                                    <h4>Review Manager - Update or delete your reviews.</h4>
                                     {
                                         userProfile.shops.map((shop, index) => (
                                             <div key={shop.id}>
-                                                <p>{shop.name}</p>
-                                                <p>{shop.description}</p>
+                                                <h4>{shop.name}</h4>
                                                 <div>
-                                                    {
-                                                        userProfile.reviews.filter(review => review.shop_id === shop.id).map((review, index1) => (
-                                                            <div key={review.id}>
-                                                                <ul>
-                                                                    <li>
-                                                                        <h5>{review.title}</h5>
-                                                                        <h6>{review.description}</h6>
-                                                                    </li>
-                                                                </ul>
+                                                    {userProfile.reviews.filter(review => review.shop_id === shop.id).map((review, index1) => (
+                                                        <div key={review.id}>
+                                                            <ul>
+                                                                <li>
+                                                                    <h4>{review.title}</h4>
+                                                                    <h5>{review.description}</h5>
+                                                                </li>
+                                                            </ul>
 
-                                                                <Button key={index} size="small" color="secondary" onClick={() => { handleOpen(); setCurrentReview(review) }} >Manage Review</Button>
-                                                            </div>
-                                                        ))
+                                                            <Button key={index} size="small" color="secondary" onClick={() => { handleOpen(); setCurrentReview(review) }} >Manage Review</Button>
+                                                        </div>
+                                                    ))
                                                     }
                                                 </div>
                                             </div>
@@ -123,8 +118,6 @@ const Profile = ({ user }) => {
                                     {currentReview && <ReviewModal review={currentReview} />}
                                 </Paper>
                             </Grid>
-                            {/* Shops */}
-
                         </Grid>
                     </Container>
                 </Box>

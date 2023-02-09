@@ -15,13 +15,6 @@ const Subheader = styled.p`
 `
 
 const Header = () => {
-  // Add Animation
-
-  const handleCookieClick = () => {
-    fetch('/cookie_click')
-      .then(res => res.json())
-      .then(console.log)
-  }
 
   return (
     <Wrapper>
