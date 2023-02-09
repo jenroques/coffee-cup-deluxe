@@ -53,7 +53,7 @@ class ReviewsController < ApplicationController
   end
 
   def render_invalid_record(invalid)
-    render json: { error: invalid.record.errors }, status: :unprocessable_entity
+    render json: { error: invalid.record.errors.full_messages }, status: :unprocessable_entity
   end
 
 

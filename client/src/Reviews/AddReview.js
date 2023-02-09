@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from 'styled-components';
-import { Box, Button, TextField } from '@mui/material';
+import { Alert, Box, Button, TextField } from '@mui/material';
 import { Context } from '../Utils/Context';
 
 
@@ -15,6 +15,7 @@ const ReviewHeadline = styled.div`
 
 const AddReview = ({ user, handleClose, setNewReviews, reviewCallbackHandle }) => {
   const { shopReviews, setReviews, reviews, setUser } = useContext(Context)
+
 
   const defaultValues = {
     title: "",
@@ -94,6 +95,9 @@ const AddReview = ({ user, handleClose, setNewReviews, reviewCallbackHandle }) =
       </div>
       <Button type="submit">Create Review</Button>
       <Button onClick={handleClose}>Cancel</Button>
+      {errors.map((error) => {
+        return <Alert key={error} severity="error" className='error'>{error}</Alert>
+      })}
     </Box>
   )
 }
