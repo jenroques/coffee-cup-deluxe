@@ -59,7 +59,7 @@ function App() {
 
 
 
-  console.log(shops)
+  // console.log(shops)
   // console.log(reviews)
   // console.log(user)
   // console.log(shop)
@@ -76,7 +76,7 @@ function App() {
     });
   }
 
-  console.log(users)
+  //console.log(users)
   // if (!user) return <Login setUser={setUser} />
 
 
