@@ -13,7 +13,7 @@ const SignUp = ({ setUser }) => {
     const [errors, setErrors] = useState([]);
     const [isLoading, setIsLoading] = useState("");
     const history = useHistory();
-    const { setIsLoggedIn } = useContext(Context)
+    const { setIsLoggedIn, setUsers, users } = useContext(Context)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,8 +32,11 @@ const SignUp = ({ setUser }) => {
         }).then((r) => {
             setIsLoading(false);
             if (r.ok) {
-                r.json().then((user) => setUser(user));
-                history.push("/shops")
+                r.json().then((user) => {
+                    setUser(user)
+                    setUsers([...users, user])
+                    history.push("/shops")
+                })
             } else {
                 r.json().then((err) => setErrors(Object.values(err.error).flat()));
             }

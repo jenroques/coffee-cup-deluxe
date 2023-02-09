@@ -140,9 +140,7 @@ const Shops = ({ user, shops, setShop }) => {
             >
               <TextField
                 id="shop-name"
-                defaultValue="Name"
                 label="Name"
-
                 onChange={handleChange}
                 value={form.name}
                 name='name'

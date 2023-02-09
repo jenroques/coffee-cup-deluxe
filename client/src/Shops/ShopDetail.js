@@ -25,6 +25,10 @@ const ShopDetail = () => {
     const [newReviews, setNewReviews] = useState();
     const [currentShop, setCurrentShop] = useState({});
 
+    // if (!users) {
+    //     return <p>Loading...</p>
+    // }
+
     const handleClose = () => {
         setOpen(false);
         setNewReviews(reviews)
@@ -34,11 +38,11 @@ const ShopDetail = () => {
         fetch(`/shops/${shop.id}`)
             .then((res) => res.json())
             .then((currentShop) => setCurrentShop(currentShop))
-    }, [shop])
+    }, [])
 
     useEffect(() => {
         setShopReviews(shop)
-    }, [shop, setShopReviews]);
+    }, [setShopReviews]);
 
     const handleClick = () => {
         setShopReviews(shop)

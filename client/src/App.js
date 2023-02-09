@@ -40,15 +40,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetch("/reviews")
-      .then((res) => {
-        if (res.ok) {
-          res.json().then((reviews) => setReviews(reviews));
-        }
-      })
-  }, [])
-
-  useEffect(() => {
     fetch("/users")
       .then((res) => {
         if (res.ok) {
@@ -57,7 +48,18 @@ function App() {
       })
   }, []);
 
-  // console.log(shops)
+  useEffect(() => {
+    fetch("/reviews")
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((reviews) => setReviews(reviews));
+        }
+      })
+  }, [])
+
+
+
+  console.log(shops)
   // console.log(reviews)
   // console.log(user)
   // console.log(shop)
@@ -74,7 +76,7 @@ function App() {
     });
   }
 
-
+  console.log(users)
   // if (!user) return <Login setUser={setUser} />
 
 
@@ -82,6 +84,7 @@ function App() {
     <Context.Provider
       value={{
         users,
+        setUsers,
         user,
         setUser,
         id,
