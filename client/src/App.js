@@ -23,6 +23,14 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    // check local storage for isLoggedIn and set the authentication state
+    const isLoggedInStorage = localStorage.getItem('isLoggedIn');
+    if (isLoggedInStorage === 'true') {
+      setIsLoggedIn(prevIsLoggedIn => true);
+    }
+  }, []);
+
+  useEffect(() => {
     fetch("/me").then((res) => {
       if (res.ok) {
         res.json().then((user) => setUser(user));
@@ -73,6 +81,7 @@ function App() {
         history.push("./login")
       }
       setIsLoggedIn(false)
+      localStorage.removeItem('isLoggedIn');
     });
   }
 

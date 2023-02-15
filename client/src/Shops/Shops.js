@@ -150,7 +150,6 @@ const Shops = ({ user, shops, setShop }) => {
                   sx={{ mt: 2 }}
                   id="shop_image"
                   label="Image URL"
-                  defaultValue="Image URL"
                   onChange={handleChange}
                   value={form.image_url}
                   name='image_url'

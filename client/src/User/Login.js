@@ -49,6 +49,7 @@ const Login = () => {
                     setUser(user)
                     history.push('/shops')
                     setIsLoggedIn(true)
+                    localStorage.setItem('isLoggedIn', true);
                 });
             } else {
                 res.json().then((err) => setErrors(err.error));

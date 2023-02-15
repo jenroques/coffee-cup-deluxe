@@ -6,14 +6,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useHistory } from 'react-router-dom';
 import { Context } from '../Utils/Context';
 
-const SignUp = ({ setUser }) => {
+const SignUp = () => {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [errors, setErrors] = useState([]);
     const [isLoading, setIsLoading] = useState("");
     const history = useHistory();
-    const { setIsLoggedIn, setUsers, users } = useContext(Context)
+    const { setIsLoggedIn, setUsers, users, setUser } = useContext(Context)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,6 +35,7 @@ const SignUp = ({ setUser }) => {
                 r.json().then((user) => {
                     setUser(user)
                     setUsers([...users, user])
+                    localStorage.setItem('isLoggedIn', true);
                     history.push("/shops")
                 })
             } else {
